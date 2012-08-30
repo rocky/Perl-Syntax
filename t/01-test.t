@@ -6,6 +6,7 @@ use Test::More;
 use English;
 
 chdir dirname(__FILE__);
+my $short_name = basename(__FILE__);
 sub test_rc($$) {
     my ($is_zero, $msg) = @_;
     0 == $is_zero ? is($?>>8, 0, $msg) : isnt($?>>8, 0, $msg);
@@ -14,7 +15,7 @@ sub test_rc($$) {
 diag("Testing return code only");
 my @prefix = ("$EXECUTABLE_NAME", '-I../lib', '-MPerl::Syntax');
 
-system(@prefix, basename(__FILE__));
+system(@prefix, $short_name);
 test_rc(0, __FILE__ . " is syntactically valid Perl" );
 
 system(@prefix, 'bad.pl');
@@ -29,7 +30,7 @@ test_rc(1, "1+ is not a syntactically invalid Perl expression" );
 diag("Testing Temporary file contents");
 
 my ($fh, $tempfile) = tempfile('SyntaxXXXX', SUFFIX=>'.log',
-			       TMPDIR => 1);
+			       UNLINK => 1,  TMPDIR => 1);
 
 @prefix = ("$EXECUTABLE_NAME", '-I../lib', "-MPerl::Syntax=$tempfile");
 
