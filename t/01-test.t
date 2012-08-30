@@ -36,14 +36,19 @@ my ($fh, $tempfile) = tempfile('SyntaxXXXX', SUFFIX=>'.log',
 system(@prefix, basename(__FILE__));
 ok(-s $tempfile, "Should have have written something to $tempfile");
 seek($fh, 0, 0);
-like(<$fh>, qr/syntax OK/, "Should get syntax OK message");
+like(<$fh>, qr/syntax OK/, "Syntax OK message in program file");
 
 system(@prefix, 'bad.pl');
 ok(-s $tempfile, "Should have somthing to $tempfile");
 seek($fh, 0, 0);
-like(<$fh>, qr/^syntax error at /, "Should syntax error message");
-# 01-test.t syntax OK
+like(<$fh>, qr/^syntax error at /, "syntax error message in program file");
 
-seek $fh,0,0;
+system(@prefix, '-e', 'my $a=foo();');
+seek($fh, 0, 0);
+like(<$fh>, qr/syntax OK/, "Syntax OK on -e string");
+
+system(@prefix, '-e', 'my $a=foo(');
+seek($fh, 0, 0);
+like(<$fh>, qr/^syntax error at /, "Syntax error on -e string");
 
 done_testing();
