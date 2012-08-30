@@ -18,6 +18,13 @@ use strict;
 use warnings;
 use Module::Build;
 use Config;
+use File::Basename;
+use File::Spec;
+
+my $dirname = dirname(__FILE__);
+do File::Spec->catfile(($dirname, qw(lib Perl Syntax.pm)));
+
+my $release_status = ($Perl::Syntax::VERSION =~ /_/) ? 'testing' : 'stable';
 
 my $builder = Module::Build->new( 
     module_name         => 'Perl::Syntax',
@@ -28,8 +35,7 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/Perl/Syntax.pm',
     license             => 'gpl',
     needs_compiler      => 0,
-    # release_status      => 'stable', # or 'testing'
-    release_status      => 'testing',  # or 'stable'
+    release_status      => $release_status,
 
     meta_merge => {
 	resources => {

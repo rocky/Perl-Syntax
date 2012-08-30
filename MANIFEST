@@ -5,3 +5,6 @@ lib/Perl/Syntax.pm
 MANIFEST			This list of files
 t/01-test.t
 t/bad.pl
+Makefile.PL
+META.yml
+META.json
