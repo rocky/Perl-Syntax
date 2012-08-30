@@ -27,6 +27,9 @@ test_rc(0, "1+2 is a syntactically valid Perl expression" );
 system(@prefix, '-e', '1+');
 test_rc(1, "1+ is not a syntactically invalid Perl expression" );
 
+system("$EXECUTABLE_NAME -I../lib -MPerl::Syntax $short_name");
+test_rc(0, "run system with a string" );
+
 diag("Testing Temporary file contents");
 
 my ($fh, $tempfile) = tempfile('SyntaxXXXX', SUFFIX=>'.log',

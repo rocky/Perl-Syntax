@@ -7,17 +7,22 @@ Perl::Syntax -- Syntax Check Perl files and strings
 =head1 Summary
 
 This module syntax checks Perl files and strings. It is identical
-to running C<perl -c ...>, but you have more control over the output that
-Perl produces. 
+to running C<perl -c ...>, but output doesn't go by default to STDOUT.
 
 You run his like this from a command line:
 
     $ perl -MPerl::Syntax perl-program.pl
     $ perl -MPerl::Syntax -e 'your perl code' 
 
+which is like: 
+
+    $ perl -c perl-program.pl 2>/dev/null
+    $ perl -MPerl::Syntax -e 'your perl code' 2>/dev/null
+
 Or from inside Perl: 
 
      system($^X, '-M', 'Perl::Syntax', $perl_program);
+     system("$^X -M Perl::Syntax $perl_program");
      # check $? 
 
 By default, no output is produced. You will get a zero return code if
@@ -26,10 +31,14 @@ everything checks out or nonzero if there was a syntax error.
 To capture output to a file, you can specify a file name by adding an
 equal sign after "Perl::Syntax" like this:
 
-    perl -MPerl::Syntax=my/output-file.txt perl-program.pl 
+    perl -MPerl::Syntax=/tmp/output-file.txt perl-program.pl 
 
-File I<output-file.txt> will have either the messages Perl normally produces on
-C<STDERR>: 
+or inside PerL:
+
+     system($^X, '-M', 'Perl::Syntax=/tmp/outfile-file.txt', $perl_program);
+
+File I</tmp/output-file.txt> will have either the messages Perl
+normally produces on C<STDERR>:
 
     XXXX syntax OK
 
@@ -57,9 +66,9 @@ or
 
 =head1 Bugs/Caveats
 
-Inside Perl, it is important not to use the one argument string form
-of I<system()>, because that will sometimes not fork code and then you
-might find your C<STDERR> messed up. 
+There doesn't seem to be much benefit here over using C<perl -c> with
+C<STDERR> redirected. What I really want is a kind of eval that just
+does the syntax checking.
 
 =head1 Author
 
