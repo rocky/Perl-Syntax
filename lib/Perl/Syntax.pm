@@ -80,7 +80,8 @@ Or from inside Perl:
 By default, no output is produced. You will get a zero return code if
 everything checks out or nonzero if there was a syntax error. 
 
-To capture output to a file, you can specify a file name like this:
+To capture output to a file, you can specify a file name by adding an
+equal sign after "Perl::Syntax" like this:
 
     perl -MPerl::Syntax=my/output-file.txt perl-program.pl 
 
@@ -97,7 +98,7 @@ or
 =head1 Examples
 
      use English;
-     my @prefix = ("$EXECUTABLE_NAME", '-MPerl::Syntax');
+     my @prefix = ($EXECUTABLE_NAME, '-MPerl::Syntax');
 
      # test this Perl code to see if it is syntactically correct;
      system(@prefix, __FILE__); 
@@ -106,6 +107,10 @@ or
      # test of invalid Perl code: 
      system(@prefix, '-e', '$Incomplete + $Expression +'; 
      print "Try again" if $? >> 8;
+
+     # Show capturing output
+     system($EXECUTABLE_NAME, '-MPerl::Syntax=/tmp/Syntax.log', __FILE__);
+     # results are in /tmp/Syntax.log
 
 =head1 Bugs/Caveats
 
